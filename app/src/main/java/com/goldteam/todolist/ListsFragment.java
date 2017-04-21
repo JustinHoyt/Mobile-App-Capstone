@@ -10,19 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class ProfessorListFragment extends ListFragment {
-    static interface ProfessorListListener {
+public class ListsFragment extends ListFragment {
+    static interface ListsListener {
         void itemClicked(long id);
     }
 
-    private ProfessorListListener listener;
+    private ListsListener listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        String[] names = new String[Professor.professors.length];
+        String[] names = new String[List.LISTs.length];
         for (int i = 0; i < names.length; i++) {
-            names[i] = Professor.professors[i].getName();
+            names[i] = List.LISTs[i].getName();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -37,7 +37,7 @@ public class ProfessorListFragment extends ListFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.listener = (ProfessorListListener)activity;
+        this.listener = (ListsListener)activity;
     }
 
     @Override
