@@ -1,4 +1,4 @@
-package com.justinhoyt.ratemyprofessor;
+package com.goldteam.todolist;
 
 import android.app.Activity;
 import android.os.Bundle;

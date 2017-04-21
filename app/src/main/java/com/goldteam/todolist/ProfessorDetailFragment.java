@@ -1,4 +1,4 @@
-package com.justinhoyt.ratemyprofessor;
+package com.goldteam.todolist;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;

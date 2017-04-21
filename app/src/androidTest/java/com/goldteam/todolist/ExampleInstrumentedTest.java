@@ -1,4 +1,4 @@
-package com.justinhoyt.ratemyprofessor;
+package com.goldteam.todolist;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
