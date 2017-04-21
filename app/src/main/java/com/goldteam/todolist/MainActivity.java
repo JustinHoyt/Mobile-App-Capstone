@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.goldteam.todolist.Database.DataDefinitions;
+import com.goldteam.todolist.Database.DataManipulations;
+
 public class MainActivity extends Activity implements ProfessorListFragment.ProfessorListListener{
 
     @Override
