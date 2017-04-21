@@ -13,8 +13,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 
-public class ProfessorDetailFragment extends Fragment {
-    private long professorId;
+public class TasksFragment extends Fragment {
+    private long listId;
     private TextView tvProfessorName;
     private ImageView ivProfessorImage;
     public SharedPreferences preferences;
@@ -23,18 +23,18 @@ public class ProfessorDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            professorId = savedInstanceState.getLong("professorId");
+            listId = savedInstanceState.getLong("listId");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_professor_detail, container, false);
-        Professor professor = Professor.professors[(int) professorId];
+        View view = inflater.inflate(R.layout.tasks, container, false);
+        List list = List.LISTs[(int) listId];
 
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.professorLayout);
-        String[] degrees = professor.getDegrees().split("; ");
+        String[] degrees = list.getDegrees().split("; ");
         for( String degree : degrees){
             TextView textView = new TextView(getActivity());
             textView.setPadding(8, 16, 8, 16);
@@ -59,24 +59,24 @@ public class ProfessorDetailFragment extends Fragment {
         rbProfessorRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                preferences.edit().putFloat("professor_" + professorId + "_rating", rating).commit();
+                preferences.edit().putFloat("professor_" + listId + "_rating", rating).commit();
             }
         });
 
-        float ratings = preferences.getFloat("professor_" + professorId + "_rating", 0f);
+        float ratings = preferences.getFloat("professor_" + listId + "_rating", 0f);
         rbProfessorRating.setRating(ratings);
 
         if (view != null) {
-            Professor professor = Professor.professors[(int) professorId];
+            List list = List.LISTs[(int) listId];
 
 
-            tvProfessorName.setText(professor.getName());
-            ivProfessorImage.setImageResource(professor.getResourceId());
+            tvProfessorName.setText(list.getName());
+            ivProfessorImage.setImageResource(list.getResourceId());
         }
     }
 
 
     public void setProfessor(long professorId) {
-        this.professorId = professorId;
+        this.listId = professorId;
     }
 }

@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+
 import com.goldteam.todolist.Database.DataDefinitions;
 import com.goldteam.todolist.Database.DataManipulations;
 
-public class MainActivity extends Activity implements ProfessorListFragment.ProfessorListListener{
-
+public class MainActivity extends Activity implements ListsFragment.ListsListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +21,7 @@ public class MainActivity extends Activity implements ProfessorListFragment.Prof
     public void itemClicked(long id) {
         View fragmentContainer = findViewById(R.id.fragment_container);
         if (fragmentContainer != null) {
-            ProfessorDetailFragment details = new ProfessorDetailFragment();
+            TasksFragment details = new TasksFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             details.setProfessor(id);
             ft.replace(R.id.fragment_container, details);
@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements ProfessorListFragment.Prof
             ft.commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra(DetailActivity.PROFESSOR_ID, (int)id);
+            intent.putExtra(DetailActivity.LIST_ID, (int)id);
             startActivity(intent);
         }
     }
