@@ -27,6 +27,7 @@ public class ListsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         db = new DatabaseHelper(inflater.getContext());
+
         java.util.List<String> lists = new ArrayList<>();
         lists = db.readLists();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(

@@ -26,6 +26,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DataDefinitions.SQL_CREATE_LIST_TABLE);
         db.execSQL(DataDefinitions.SQL_CREATE_TASK_TABLE);
+        for (String sqlCommand : DataDefinitions.SQL_SEED_LIST_TABLE) {
+            db.execSQL(sqlCommand);
+        }
     }
 
     @Override
@@ -49,11 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public List<String> readLists() {
         SQLiteDatabase db = this.getReadableDatabase();
-        //String[] lists;
+        List lists = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " + DataDefinitions.TableDefinitions.LIST_TABLE_NAME, null);
-
-        List lists = new ArrayList<>();
         while(cursor.moveToNext()) {
             String list = cursor.getString(
                     cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.LIST_NAME));
@@ -61,5 +62,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
         cursor.close();
         return lists;
+    }
+
+    public void deleteLists(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "delete from " +
+                DataDefinitions.TableDefinitions.LIST_TABLE_NAME +
+                " where " +
+                DataDefinitions.TableDefinitions.ID +
+                " = " +
+                id;
+        db.rawQuery(query,
+                null);
     }
 }

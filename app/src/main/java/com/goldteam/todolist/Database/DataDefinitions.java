@@ -2,6 +2,9 @@ package com.goldteam.todolist.Database;
 
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by drews on 4/21/2017.
  */
@@ -20,14 +23,36 @@ public class DataDefinitions {
 
     }
 
-    public static final String SQL_CREATE_LIST_TABLE = "CREATE TABLE " + TableDefinitions.LIST_TABLE_NAME + " (" +
-            TableDefinitions.ID + " INTEGER PRIMARY KEY," +
-            TableDefinitions.LIST_NAME + " TEXT)";
+    public static final String SQL_CREATE_LIST_TABLE =
+            "CREATE TABLE IF NOT EXISTS " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " (" +
+            TableDefinitions.ID +
+            " INTEGER PRIMARY KEY, " +
+            TableDefinitions.LIST_NAME +
+            " TEXT)";
 
-    public static final String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + TableDefinitions.TASK_TABLE_NAME + " (" +
-            TableDefinitions.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            TableDefinitions.TASK + " TEXT NOT NULL," +
-            TableDefinitions.IS_CHECKED + " INTEGER DEFAULT 0 NOT NULL)";
+    public static final String SQL_CREATE_TASK_TABLE =
+            "CREATE TABLE IF NOT EXISTS " +
+            TableDefinitions.TASK_TABLE_NAME +
+            " (" +
+            TableDefinitions.ID +
+            " INTEGER PRIMARY KEY, " +
+            TableDefinitions.TASK +
+            " TEXT NOT NULL, " +
+            TableDefinitions.IS_CHECKED +
+            " INTEGER DEFAULT 0 NOT NULL)";
+
+    public static final String[] SQL_SEED_LIST_TABLE = {
+            "insert into " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " values (null, 'To Do List')",
+
+            "insert into " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " values (null, 'Shopping List')"
+    };
+
 
     public static final String SQL_DELETE_LIST_TABLE =
             "DROP TABLE IF EXISTS " + TableDefinitions.LIST_TABLE_NAME;

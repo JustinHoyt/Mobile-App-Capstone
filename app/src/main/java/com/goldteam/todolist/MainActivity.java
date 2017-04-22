@@ -3,10 +3,14 @@ package com.goldteam.todolist;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 
+import com.goldteam.todolist.Database.DataDefinitions;
 import com.goldteam.todolist.Database.DatabaseHelper;
+
+import java.io.File;
 
 public class MainActivity extends Activity implements ListsFragment.ListsListener {
     public DatabaseHelper db;
@@ -15,9 +19,6 @@ public class MainActivity extends Activity implements ListsFragment.ListsListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = new DatabaseHelper(this);
-        db.writeLists("To Do");
-        db.writeLists("Shopping");
     }
 
     @Override
