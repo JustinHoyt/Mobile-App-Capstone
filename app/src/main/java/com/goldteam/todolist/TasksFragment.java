@@ -17,6 +17,7 @@ public class TasksFragment extends Fragment {
     private long listId;
     private TextView tvProfessorName;
     private ImageView ivProfessorImage;
+    private TextView test;
     public SharedPreferences preferences;
 
     @Override

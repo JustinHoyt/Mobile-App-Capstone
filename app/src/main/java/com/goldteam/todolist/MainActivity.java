@@ -6,15 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
-import com.goldteam.todolist.Database.DataDefinitions;
-import com.goldteam.todolist.Database.DataManipulations;
+import com.goldteam.todolist.Database.DatabaseHelper;
 
 public class MainActivity extends Activity implements ListsFragment.ListsListener {
+    public DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = new DatabaseHelper(this);
+        db.writeLists("To Do");
+        db.writeLists("Shopping");
     }
 
     @Override
