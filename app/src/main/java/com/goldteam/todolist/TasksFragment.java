@@ -12,13 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.goldteam.todolist.Database.DatabaseHelper;
+
 
 public class TasksFragment extends Fragment {
     private long listId;
-    private TextView tvProfessorName;
-    private ImageView ivProfessorImage;
-    private TextView test;
+    private TextView ListName;
+
     public SharedPreferences preferences;
+
+    private DatabaseHelper db;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -31,19 +34,21 @@ public class TasksFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tasks, container, false);
-        List list = List.LISTs[(int) listId];
+        //View view = inflater.inflate(R.layout.tasks, container, false);
+        db = new DatabaseHelper(inflater.getContext());
+        //List list = List.LISTs[(int) listId];
 
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.professorLayout);
-        String[] degrees = list.getDegrees().split("; ");
-        for( String degree : degrees){
-            TextView textView = new TextView(getActivity());
-            textView.setPadding(8, 16, 8, 16);
-            textView.setTextSize(20f);
-            textView.setText(degree);
-            linearLayout.addView(textView);
-        }
-        return view;
+        //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.professorLayout);
+//        String[] degrees = list.getDegrees().split("; ");
+//        for( String degree : degrees){
+//            TextView textView = new TextView(getActivity());
+//            textView.setPadding(8, 16, 8, 16);
+//            textView.setTextSize(20f);
+//            textView.setText(degree);
+//            linearLayout.addView(textView);
+//        }
+        //return view;
+        return inflater.inflate(R.layout.tasks, container, false);
     }
 
 
@@ -51,28 +56,16 @@ public class TasksFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
+        db.getWritableDatabase();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
-        tvProfessorName = (TextView) view.findViewById(R.id.tvProfessorName);
-        ivProfessorImage = (ImageView) view.findViewById(R.id.ivProfessorImage);
-
-        RatingBar rbProfessorRating = (RatingBar) view.findViewById(R.id.rbProfessorRating);
-        rbProfessorRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                preferences.edit().putFloat("professor_" + listId + "_rating", rating).commit();
-            }
-        });
-
-        float ratings = preferences.getFloat("professor_" + listId + "_rating", 0f);
-        rbProfessorRating.setRating(ratings);
+        ListName = (TextView) view.findViewById(R.id.list_name);
 
         if (view != null) {
-            List list = List.LISTs[(int) listId];
+            //List list = List.LISTs[(int) listId];
+            String listName = db.readList((int) listId);
 
-
-            tvProfessorName.setText(list.getName());
-            ivProfessorImage.setImageResource(list.getResourceId());
+            ListName.setText(listName);
         }
     }
 

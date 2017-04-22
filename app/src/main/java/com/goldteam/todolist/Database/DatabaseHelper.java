@@ -64,6 +64,27 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return lists;
     }
 
+    public String readList(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String list = "";
+        int listID = id+1;
+
+        Cursor cursor = db.rawQuery("select * from " +
+                DataDefinitions.TableDefinitions.LIST_TABLE_NAME +
+                " where " +
+                DataDefinitions.TableDefinitions.ID +
+                " = " +
+                listID,
+                null);
+
+        while(cursor.moveToNext()) {
+            list = cursor.getString(
+                    cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.LIST_NAME));
+        }
+        cursor.close();
+        return list;
+    }
+
     public void deleteLists(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "delete from " +
