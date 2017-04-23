@@ -41,7 +41,7 @@ public class TasksFragment extends Fragment {
     private DatabaseHelper db;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             listId = savedInstanceState.getLong("listId");
@@ -51,21 +51,23 @@ public class TasksFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.tasks, container, false);
         db = new DatabaseHelper(inflater.getContext());
-        //List list = List.LISTs[(int) listId];
-
-        //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.professorLayout);
-//        String[] degrees = list.getDegrees().split("; ");
-//        for( String degree : degrees){
-//            TextView textView = new TextView(getActivity());
-//            textView.setPadding(8, 16, 8, 16);
-//            textView.setTextSize(20f);
-//            textView.setText(degree);
-//            linearLayout.addView(textView);
-//        }
-        //return view;
         return inflater.inflate(R.layout.tasks, container, false);
+    }
+
+    public void refreshTasks() {
+        List<String> tasks = db.readTasks((int) listId);
+        tasks = db.readTasks((int) listId);
+
+        //fragment_preference = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+
+        TaskList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //String[] test = {"test1", "test2", "test3"};
+        adapter = new ArrayAdapter<String>(
+                getView().getContext(),
+                android.R.layout.simple_expandable_list_item_1,
+                tasks);
+        TaskList.setAdapter(adapter);
     }
 
 
@@ -74,51 +76,31 @@ public class TasksFragment extends Fragment {
         super.onStart();
         View view = getView();
         db.getWritableDatabase();
-        tasks = db.readTasks((int) listId);
-
-        //fragment_preference = PreferenceManager.getDefaultSharedPreferences(view.getContext());
-        ListName = (TextView) view.findViewById(R.id.list_name);
-
-        TaskList = (ListView) view.findViewById(R.id.task_list);
-        TaskList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        //String[] test = {"test1", "test2", "test3"};
-        adapter = new ArrayAdapter<String>(
-                view.getContext(),
-                android.R.layout.simple_expandable_list_item_1,
-                tasks);
-        TaskList.setAdapter(adapter);
+        ListName = (TextView) getView().findViewById(R.id.list_name);
+        TaskList = (ListView) getView().findViewById(R.id.task_list);
+        refreshTasks();
+        newTask = (EditText) view.findViewById(R.id.new_task);
+        addTask = (Button) view.findViewById(R.id.add_task);
         TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                int currentPaintFlags = ((TextView)view).getPaintFlags();
-                if((((TextView)view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG) > currentPaintFlags )
-                    ((TextView)view).setPaintFlags(((TextView)view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int currentPaintFlags = ((TextView) view).getPaintFlags();
+                if ((((TextView) view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG) > currentPaintFlags)
+                    ((TextView) view).setPaintFlags(((TextView) view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 else {
-                    ((TextView)view).setPaintFlags(0);
+                    ((TextView) view).setPaintFlags(0);
                 }
             }
         });
 
-        newTask = (EditText) view.findViewById(R.id.new_task);
-        addTask = (Button) view.findViewById(R.id.add_task);
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
                 db.writeTask(newTaskText, (int) listId);
-
-//                Fragment currentFragment = getFragmentManager().findFragmentByTag("TASK");
-//                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.detach(getFragmentManager()
-//                    .findFragmentByTag("TASK"))
-//                    .attach(getFragmentManager()
-//                    .findFragmentByTag("TASK"))
-//                    .commit();
+                refreshTasks();
             }
         });
-
-        //adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, professor.getDegreeList());
-        //TaskList.setAdapter(adapter);
 
         if (view != null) {
             //List list = List.LISTs[(int) listId];
