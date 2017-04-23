@@ -50,6 +50,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.insert(DataDefinitions.TableDefinitions.LIST_TABLE_NAME, null, values);
     }
 
+    public void writeTask(String task, int listID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DataDefinitions.TableDefinitions.TASK_NAME, task);
+        values.put(DataDefinitions.TableDefinitions.LIST_FK, listID);
+        db.insert(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, null, values);
+    }
+
     public List<String> readLists() {
         SQLiteDatabase db = this.getReadableDatabase();
         List lists = new ArrayList<>();
@@ -83,6 +91,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
         cursor.close();
         return list;
+    }
+
+    public List<String> readTasks(int listID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List tasks = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("select * from " +
+                DataDefinitions.TableDefinitions.TASK_TABLE_NAME +
+                " where " +
+                DataDefinitions.TableDefinitions.LIST_FK +
+                " = " +
+                listID, null);
+        while(cursor.moveToNext()) {
+            String list = cursor.getString(
+                    cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.TASK_NAME));
+            tasks.add(list);
+        }
+        cursor.close();
+        return tasks;
     }
 
     public void deleteLists(int id) {

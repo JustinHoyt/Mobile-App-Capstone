@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements ListsFragment.ListsListene
             TasksFragment details = new TasksFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             details.setProfessor(id);
-            ft.replace(R.id.fragment_container, details);
+            ft.replace(R.id.fragment_container, details, "TASK");
             ft.addToBackStack(null);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();

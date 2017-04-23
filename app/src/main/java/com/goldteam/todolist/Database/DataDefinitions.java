@@ -2,9 +2,6 @@ package com.goldteam.todolist.Database;
 
 import android.provider.BaseColumns;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by drews on 4/21/2017.
  */
@@ -18,7 +15,8 @@ public class DataDefinitions {
 
         public static final String ID = "id";
         public static final String LIST_NAME = "list_name";
-        public static final String TASK = "task";
+        public static final String LIST_FK = "list_id";
+        public static final String TASK_NAME = "task";
         public static final String IS_CHECKED = "is_checked";
 
     }
@@ -38,7 +36,9 @@ public class DataDefinitions {
             " (" +
             TableDefinitions.ID +
             " INTEGER PRIMARY KEY, " +
-            TableDefinitions.TASK +
+            TableDefinitions.LIST_FK +
+            " INTEGER NOT NULL, " +
+            TableDefinitions.TASK_NAME +
             " TEXT NOT NULL, " +
             TableDefinitions.IS_CHECKED +
             " INTEGER DEFAULT 0 NOT NULL)";

@@ -22,9 +22,20 @@
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="275dp"
-            android:layout_weight="1"
+            android:layout_height="411dp"
             android:id="@+id/task_list" />
+
+        <EditText
+            android:id="@+id/new_task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter new item" />
+
+        <Button
+            android:id="@+id/add_task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Task" />
 
     </LinearLayout>
 </ScrollView>

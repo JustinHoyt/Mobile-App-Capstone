@@ -1,6 +1,7 @@
 package com.goldteam.todolist;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,12 +21,18 @@ import android.widget.TextView;
 
 import com.goldteam.todolist.Database.DatabaseHelper;
 
+import java.util.*;
+import java.util.List;
+
 
 public class TasksFragment extends Fragment {
     private long listId;
     private TextView ListName;
+    private List<String> tasks;
     private ArrayAdapter<String> adapter;
     private ListView TaskList;
+    private EditText newTask;
+    private Button addTask;
     //private ListsListener listener;
 
 
@@ -65,17 +74,18 @@ public class TasksFragment extends Fragment {
         super.onStart();
         View view = getView();
         db.getWritableDatabase();
+        tasks = db.readTasks((int) listId);
 
         //preferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
         ListName = (TextView) view.findViewById(R.id.list_name);
 
         TaskList = (ListView) view.findViewById(R.id.task_list);
         TaskList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        String[] test = {"test1", "test2", "test3"};
+        //String[] test = {"test1", "test2", "test3"};
         adapter = new ArrayAdapter<String>(
                 view.getContext(),
                 android.R.layout.simple_expandable_list_item_1,
-                test);
+                tasks);
         TaskList.setAdapter(adapter);
         TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,6 +96,24 @@ public class TasksFragment extends Fragment {
                 else {
                     ((TextView)view).setPaintFlags(0);
                 }
+            }
+        });
+
+        newTask = (EditText) view.findViewById(R.id.new_task);
+        addTask = (Button) view.findViewById(R.id.add_task);
+        addTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newTaskText = newTask.getText().toString();
+                db.writeTask(newTaskText, (int) listId);
+
+//                Fragment currentFragment = getFragmentManager().findFragmentByTag("TASK");
+//                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                ft.detach(getFragmentManager()
+//                    .findFragmentByTag("TASK"))
+//                    .attach(getFragmentManager()
+//                    .findFragmentByTag("TASK"))
+//                    .commit();
             }
         });
 
