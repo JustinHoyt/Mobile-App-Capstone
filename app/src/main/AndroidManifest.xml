@@ -20,6 +20,10 @@
             android:name="com.goldteam.todolist.DetailActivity"
             android:label="DetailActivity" >
         </activity>
+        <activity
+            android:name="com.goldteam.todolist.MyPreferenceActivity"
+            android:label="Preferences">
+        </activity>
     </application>
 
 </manifest>

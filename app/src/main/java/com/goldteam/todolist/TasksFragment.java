@@ -36,7 +36,7 @@ public class TasksFragment extends Fragment {
     //private ListsListener listener;
 
 
-    //public SharedPreferences preferences;
+    //public SharedPreferences fragment_preference;
 
     private DatabaseHelper db;
 
@@ -76,7 +76,7 @@ public class TasksFragment extends Fragment {
         db.getWritableDatabase();
         tasks = db.readTasks((int) listId);
 
-        //preferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        //fragment_preference = PreferenceManager.getDefaultSharedPreferences(view.getContext());
         ListName = (TextView) view.findViewById(R.id.list_name);
 
         TaskList = (ListView) view.findViewById(R.id.task_list);
