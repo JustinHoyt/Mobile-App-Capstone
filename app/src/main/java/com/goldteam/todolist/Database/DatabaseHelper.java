@@ -66,8 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public String readList(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String list = "";
         int listID = id+1;
+        String list = "";
 
         Cursor cursor = db.rawQuery("select * from " +
                 DataDefinitions.TableDefinitions.LIST_TABLE_NAME +
