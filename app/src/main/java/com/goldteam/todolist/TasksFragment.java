@@ -39,7 +39,7 @@ public class TasksFragment extends Fragment {
     private DatabaseHelper db;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             listId = savedInstanceState.getLong("listId");
@@ -52,24 +52,28 @@ public class TasksFragment extends Fragment {
         db = new DatabaseHelper(inflater.getContext());
         return inflater.inflate(R.layout.tasks, container, false);
     }
+    
+    public void refreshTasks() {
+        tasks = db.readTasks((int) listId);
+
+        adapter = new ArrayAdapter<String>(
+                getView().getContext(),
+                android.R.layout.simple_expandable_list_item_1,
+                tasks);
+        TaskList.setAdapter(adapter);
+    }
 
 
     @Override
     public void onStart() {
         super.onStart();
         View view = getView();
-
         db.getWritableDatabase();
-        tasks = db.readTasks((int) listId);
-
-        ListName = (TextView) view.findViewById(R.id.list_name);
-
-        TaskList = (ListView) view.findViewById(R.id.task_list);
-        adapter = new ArrayAdapter<String>(
-                view.getContext(),
-                android.R.layout.simple_expandable_list_item_1,
-                tasks);
-        TaskList.setAdapter(adapter);
+        ListName = (TextView) getView().findViewById(R.id.list_name);
+        TaskList = (ListView) getView().findViewById(R.id.task_list);
+        refreshTasks();
+        newTask = (EditText) view.findViewById(R.id.new_task);
+        addTask = (Button) view.findViewById(R.id.add_task);
         TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -85,13 +89,13 @@ public class TasksFragment extends Fragment {
             }
         });
 
-        newTask = (EditText) view.findViewById(R.id.new_task);
-        addTask = (Button) view.findViewById(R.id.add_task);
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
                 db.writeTask(newTaskText, (int) listId);
+
+                refreshTasks();
             }
         });
 
