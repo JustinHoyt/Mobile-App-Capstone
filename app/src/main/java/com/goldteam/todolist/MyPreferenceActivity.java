@@ -1,6 +1,10 @@
 package com.goldteam.todolist;
 
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+
 import java.util.List;
 
 /**
@@ -13,6 +17,22 @@ public class MyPreferenceActivity extends PreferenceActivity
     public void onBuildHeaders(List<Header> target)
     {
         loadHeadersFromResource(R.xml.headers_preference, target);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PreferenceManager.setDefaultValues(this, R.xml.fragment_preference, false);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (settings.getBoolean("checkBoxPref", true)) {
+            setTheme(android.R.style.Theme_Holo);
+        } else {
+            setTheme(android.R.style.Widget_Holo_Light_ActionBar);
+        }
+
+        super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
