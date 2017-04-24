@@ -53,6 +53,9 @@ public class TasksFragment extends Fragment {
                 android.R.layout.simple_expandable_list_item_1,
                 tasks);
         TaskList.setAdapter(adapter);
+
+        String listName = db.readList((int) listId);
+        getActivity().setTitle(listName);
     }
 
 
@@ -60,6 +63,7 @@ public class TasksFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
+
         ListName = (TextView) getView().findViewById(R.id.list_name);
         TaskList = (ListView) getView().findViewById(R.id.task_list);
         refreshTasks();
@@ -90,11 +94,11 @@ public class TasksFragment extends Fragment {
             }
         });
 
-        if (view != null) {
-            String listName = db.readList((int) listId);
-
-            ListName.setText(listName);
-        }
+//        if (view != null) {
+//            String listName = db.readList((int) listId);
+//
+//            ListName.setText(listName);
+//        }
     }
 
 
