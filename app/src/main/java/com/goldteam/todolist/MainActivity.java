@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements ListsFragment.ListsListene
         if (settings.getBoolean("checkBoxPref", true)) {
             setTheme(android.R.style.Theme_Holo);
         } else {
-            setTheme(android.R.style.Widget_Holo_Light_ActionBar);
+            setTheme(android.R.style.Theme_Holo_Light);
         }
 
         setContentView(R.layout.activity_main);

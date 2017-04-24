@@ -18,7 +18,7 @@
         </activity>
         <activity
             android:name="com.goldteam.todolist.DetailActivity"
-            android:label="DetailActivity" >
+            android:label="List" >
         </activity>
         <activity
             android:name="com.goldteam.todolist.MyPreferenceActivity"
