@@ -58,6 +58,36 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.insert(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, null, values);
     }
 
+    public void writeChecked(String task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DataDefinitions.TableDefinitions.IS_CHECKED, 1);
+
+        String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
+        String[] selectionArgs = { task };
+
+        int count = db.update(
+                DataDefinitions.TableDefinitions.TASK_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+    }
+
+    public void writeUnchecked(String task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DataDefinitions.TableDefinitions.IS_CHECKED, 0);
+
+        String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
+        String[] selectionArgs = { task };
+
+        int count = db.update(
+                DataDefinitions.TableDefinitions.TASK_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+    }
+
     public List<String> readLists() {
         SQLiteDatabase db = this.getReadableDatabase();
         List lists = new ArrayList<>();
@@ -122,5 +152,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 id;
         db.rawQuery(query,
                 null);
+    }
+
+    public void deleteTask(String task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
+        String[] selectionArgs = { task };
+        db.delete(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, selection, selectionArgs);
     }
 }
