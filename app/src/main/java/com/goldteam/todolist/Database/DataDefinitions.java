@@ -17,7 +17,6 @@ public class DataDefinitions {
         public static final String LIST_NAME = "list_name";
         public static final String LIST_FK = "list_id";
         public static final String TASK_NAME = "task";
-        public static final String IS_CHECKED = "is_checked";
 
     }
 
@@ -39,9 +38,7 @@ public class DataDefinitions {
             TableDefinitions.LIST_FK +
             " INTEGER NOT NULL, " +
             TableDefinitions.TASK_NAME +
-            " TEXT NOT NULL, " +
-            TableDefinitions.IS_CHECKED +
-            " INTEGER DEFAULT 0 NOT NULL)";
+            " TEXT NOT NULL";
 
     public static final String[] SQL_SEED_LIST_TABLE = {
             "insert into " +

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ToDo.db";
-    public static DataDefinitions dd;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,36 +56,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         values.put(DataDefinitions.TableDefinitions.TASK_NAME, task);
         values.put(DataDefinitions.TableDefinitions.LIST_FK, listID);
         db.insert(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, null, values);
-    }
-
-    public void writeChecked(String task) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DataDefinitions.TableDefinitions.IS_CHECKED, 1);
-
-        String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
-        String[] selectionArgs = { task };
-
-        int count = db.update(
-                DataDefinitions.TableDefinitions.TASK_TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
-    }
-
-    public void writeUnchecked(String task) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DataDefinitions.TableDefinitions.IS_CHECKED, 0);
-
-        String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
-        String[] selectionArgs = { task };
-
-        int count = db.update(
-                DataDefinitions.TableDefinitions.TASK_TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
     }
 
     public List<String> readLists() {
@@ -161,4 +131,5 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String[] selectionArgs = { task };
         db.delete(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, selection, selectionArgs);
     }
+
 }
