@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="FOO">
+        android:title="Theme">
 
         <CheckBoxPreference
             android:key="checkBoxPref"
-            android:title="check it out"
-            android:summary="click this little box"/>
+            android:title="Night Mode"
+            android:summary="Requires restart to take effect"/>
 
     </PreferenceCategory>
 </PreferenceScreen>
