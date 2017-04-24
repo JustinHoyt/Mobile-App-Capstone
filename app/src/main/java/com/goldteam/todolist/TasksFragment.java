@@ -1,11 +1,8 @@
 package com.goldteam.todolist;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.goldteam.todolist.Database.DatabaseHelper;
 
-import org.w3c.dom.Text;
-
-import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class TasksFragment extends Fragment {
@@ -52,7 +44,7 @@ public class TasksFragment extends Fragment {
         db = new DatabaseHelper(inflater.getContext());
         return inflater.inflate(R.layout.tasks, container, false);
     }
-    
+
     public void refreshTasks() {
         tasks = db.readTasks((int) listId);
 
@@ -68,7 +60,6 @@ public class TasksFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
-        db.getWritableDatabase();
         ListName = (TextView) getView().findViewById(R.id.list_name);
         TaskList = (ListView) getView().findViewById(R.id.task_list);
         refreshTasks();
@@ -77,7 +68,7 @@ public class TasksFragment extends Fragment {
         TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                db.deleteTask(((TextView) view).getText().toString());
+                new deleteTaskThread().execute(((TextView) view).getText().toString());
 
                 for(int i=0; i<tasks.size();i++) {
                     if (tasks.get(i).equals(((TextView) view).getText().toString())) {
@@ -93,7 +84,7 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
-                db.writeTask(newTaskText, (int) listId);
+                new writeTaskThread().execute(newTaskText);
 
                 refreshTasks();
             }
@@ -109,5 +100,23 @@ public class TasksFragment extends Fragment {
 
     public void setProfessor(long professorId) {
         this.listId = professorId;
+    }
+
+    private class writeTaskThread extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            db.writeTask((String) params[0], (int) listId);
+            return null;
+        }
+    }
+
+    private class deleteTaskThread extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            db.deleteTask((String) params[0]);
+            return null;
+        }
     }
 }
