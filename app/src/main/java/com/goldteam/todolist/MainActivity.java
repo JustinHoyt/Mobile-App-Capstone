@@ -16,8 +16,6 @@ import android.view.View;
 import com.goldteam.todolist.Database.DataDefinitions;
 import com.goldteam.todolist.Database.DatabaseHelper;
 
-import java.io.File;
-
 public class MainActivity extends Activity implements ListsFragment.ListsListener {
     public DatabaseHelper db;
 
