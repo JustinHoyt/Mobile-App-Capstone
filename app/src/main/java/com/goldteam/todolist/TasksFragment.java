@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.goldteam.todolist.Database.DatabaseHelper;
 
+import org.w3c.dom.Text;
+
 import java.util.*;
 import java.util.List;
 
@@ -33,10 +35,6 @@ public class TasksFragment extends Fragment {
     private ListView TaskList;
     private EditText newTask;
     private Button addTask;
-    //private ListsListener listener;
-
-
-    //public SharedPreferences fragment_preference;
 
     private DatabaseHelper db;
 
@@ -54,15 +52,10 @@ public class TasksFragment extends Fragment {
         db = new DatabaseHelper(inflater.getContext());
         return inflater.inflate(R.layout.tasks, container, false);
     }
-
+    
     public void refreshTasks() {
-        List<String> tasks = db.readTasks((int) listId);
         tasks = db.readTasks((int) listId);
 
-        //fragment_preference = PreferenceManager.getDefaultSharedPreferences(view.getContext());
-
-        TaskList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        //String[] test = {"test1", "test2", "test3"};
         adapter = new ArrayAdapter<String>(
                 getView().getContext(),
                 android.R.layout.simple_expandable_list_item_1,
@@ -83,13 +76,16 @@ public class TasksFragment extends Fragment {
         addTask = (Button) view.findViewById(R.id.add_task);
         TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int currentPaintFlags = ((TextView) view).getPaintFlags();
-                if ((((TextView) view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG) > currentPaintFlags)
-                    ((TextView) view).setPaintFlags(((TextView) view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                else {
-                    ((TextView) view).setPaintFlags(0);
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                db.deleteTask(((TextView) view).getText().toString());
+
+                for(int i=0; i<tasks.size();i++) {
+                    if (tasks.get(i).equals(((TextView) view).getText().toString())) {
+                        tasks.remove(i);
+                    }
                 }
+                adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_expandable_list_item_1, tasks);
+                TaskList.setAdapter(adapter);
             }
         });
 
@@ -98,12 +94,12 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
                 db.writeTask(newTaskText, (int) listId);
+
                 refreshTasks();
             }
         });
 
         if (view != null) {
-            //List list = List.LISTs[(int) listId];
             String listName = db.readList((int) listId);
 
             ListName.setText(listName);
