@@ -38,7 +38,7 @@ public class DataDefinitions {
             TableDefinitions.LIST_FK +
             " INTEGER NOT NULL, " +
             TableDefinitions.TASK_NAME +
-            " TEXT NOT NULL";
+            " TEXT NOT NULL)";
 
     public static final String[] SQL_SEED_LIST_TABLE = {
             "insert into " +
