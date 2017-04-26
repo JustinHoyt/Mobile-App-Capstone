@@ -4,20 +4,14 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.goldteam.todolist.Database.DataDefinitions;
-import com.goldteam.todolist.Database.DatabaseHelper;
-
 public class MainActivity extends Activity implements ListsFragment.ListsListener {
-    public DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

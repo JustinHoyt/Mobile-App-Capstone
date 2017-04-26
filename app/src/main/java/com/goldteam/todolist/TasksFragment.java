@@ -73,6 +73,7 @@ public class TasksFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
                 new deleteTaskThread().execute(((TextView) view).getText().toString());
+                joinThread();
 
                 for(int i=0; i<tasks.size();i++) {
                     if (tasks.get(i).equals(((TextView) view).getText().toString())) {
@@ -89,16 +90,11 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
                 new writeTaskThread().execute(newTaskText);
+                joinThread();
 
                 refreshTasks();
             }
         });
-
-//        if (view != null) {
-//            String listName = db.readList((int) listId);
-//
-//            ListName.setText(listName);
-//        }
     }
 
 
@@ -121,6 +117,14 @@ public class TasksFragment extends Fragment {
         protected Object doInBackground(Object[] params) {
             db.deleteTask((String) params[0]);
             return null;
+        }
+    }
+
+    private void joinThread() {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
