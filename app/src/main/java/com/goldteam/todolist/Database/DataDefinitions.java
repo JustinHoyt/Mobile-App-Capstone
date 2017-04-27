@@ -51,7 +51,19 @@ public class DataDefinitions {
 
             "insert into " +
             TableDefinitions.LIST_TABLE_NAME +
-            " values (null, 'Shopping List')"
+            " values (null, 'Shopping List')",
+
+            "insert into " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " values (null, 'Wish List')",
+
+            "insert into " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " values (null, 'Honey-Do List')",
+
+            "insert into " +
+            TableDefinitions.LIST_TABLE_NAME +
+            " values (null, 'School Work List')"
     };
 
 
