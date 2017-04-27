@@ -30,7 +30,7 @@ public class ListsFragment extends ListFragment {
 
         java.util.List<String> lists = new ArrayList<>();
         lists = db.readLists();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 inflater.getContext(),
                 android.R.layout.simple_expandable_list_item_1,
                 lists);

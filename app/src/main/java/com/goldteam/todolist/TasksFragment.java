@@ -3,9 +3,11 @@ package com.goldteam.todolist;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,15 +16,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.goldteam.todolist.Database.DatabaseHelper;
+import com.goldteam.todolist.Database.Task;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 
 public class TasksFragment extends Fragment {
     private long listId;
     private TextView ListName;
-    private List<String> tasks;
+    private List<Task> tasks;
     private ArrayAdapter<String> adapter;
     private ListView TaskList;
     private EditText newTask;
@@ -33,6 +38,7 @@ public class TasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Iconify.with(new FontAwesomeModule());
         if (savedInstanceState != null) {
             listId = savedInstanceState.getLong("listId");
         }
@@ -48,14 +54,27 @@ public class TasksFragment extends Fragment {
     public void refreshTasks() {
         tasks = db.readTasks((int) listId);
 
-        adapter = new ArrayAdapter<String>(
-                getView().getContext(),
-                android.R.layout.simple_expandable_list_item_1,
-                tasks);
-        TaskList.setAdapter(adapter);
+        final List<String> taskList = new ArrayList<>();
 
-        String listName = db.readList((int) listId);
-        getActivity().setTitle(listName);
+        for (Task task : tasks) {
+            taskList.add(task.getName());
+        }
+
+
+        adapter = new ListItemAdapter(
+                getView().getContext(),
+                android.R.layout.simple_list_item_1,
+                taskList,
+                db,
+                (int) listId,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshTasks();
+                    }
+                }
+        );
+        TaskList.setAdapter(adapter);
     }
 
 
@@ -67,38 +86,31 @@ public class TasksFragment extends Fragment {
         ListName = (TextView) getView().findViewById(R.id.list_name);
         TaskList = (ListView) getView().findViewById(R.id.task_list);
         refreshTasks();
+        String listName = db.readList((int) listId);
+        getActivity().setTitle(listName);
         newTask = (EditText) view.findViewById(R.id.new_task);
-        addTask = (Button) view.findViewById(R.id.add_task);
-        TaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        newTask.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                new deleteTaskThread().execute(((TextView) view).getText().toString());
-
-                for(int i=0; i<tasks.size();i++) {
-                    if (tasks.get(i).equals(((TextView) view).getText().toString())) {
-                        tasks.remove(i);
-                    }
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    String newTaskText = newTask.getText().toString();
+                    new writeTaskThread().execute(newTaskText);
+                    newTask.setText("");
+                    return true;
                 }
-                adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_expandable_list_item_1, tasks);
-                TaskList.setAdapter(adapter);
+                return false;
             }
         });
+        addTask = (Button) view.findViewById(R.id.add_task);
 
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newTaskText = newTask.getText().toString();
                 new writeTaskThread().execute(newTaskText);
-
                 refreshTasks();
             }
         });
-
-//        if (view != null) {
-//            String listName = db.readList((int) listId);
-//
-//            ListName.setText(listName);
-//        }
     }
 
 
@@ -112,6 +124,12 @@ public class TasksFragment extends Fragment {
         protected Object doInBackground(Object[] params) {
             db.writeTask((String) params[0], (int) listId);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            refreshTasks();
         }
     }
 

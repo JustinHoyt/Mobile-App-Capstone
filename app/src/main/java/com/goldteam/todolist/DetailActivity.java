@@ -5,13 +5,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
+
 
 public class DetailActivity extends Activity{
     public static final String LIST_ID = "id";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Iconify.with(new FontAwesomeModule());
 
         PreferenceManager.setDefaultValues(this, R.xml.fragment_preference, false);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);

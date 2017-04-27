@@ -15,6 +15,8 @@ import android.view.View;
 
 import com.goldteam.todolist.Database.DataDefinitions;
 import com.goldteam.todolist.Database.DatabaseHelper;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 public class MainActivity extends Activity implements ListsFragment.ListsListener {
     public DatabaseHelper db;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity implements ListsFragment.ListsListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Iconify.with(new FontAwesomeModule());
 
         PreferenceManager.setDefaultValues(this, R.xml.fragment_preference, false);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);

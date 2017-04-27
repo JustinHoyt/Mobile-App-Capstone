@@ -17,6 +17,7 @@ public class DataDefinitions {
         public static final String LIST_NAME = "list_name";
         public static final String LIST_FK = "list_id";
         public static final String TASK_NAME = "task";
+        public static final String TASK_COMPLETED = "task_completed";
 
     }
 
@@ -29,16 +30,19 @@ public class DataDefinitions {
             TableDefinitions.LIST_NAME +
             " TEXT)";
 
-    public static final String SQL_CREATE_TASK_TABLE =
-            "CREATE TABLE IF NOT EXISTS " +
-            TableDefinitions.TASK_TABLE_NAME +
-            " (" +
-            TableDefinitions.ID +
-            " INTEGER PRIMARY KEY, " +
-            TableDefinitions.LIST_FK +
-            " INTEGER NOT NULL, " +
-            TableDefinitions.TASK_NAME +
-            " TEXT NOT NULL)";
+    public static final String SQL_CREATE_TASK_TABLE = String.format(
+            "CREATE TABLE IF NOT EXISTS %s (" +
+                    "%s INTEGER PRIMARY KEY, " +
+                    "%s INTEGER NOT NULL, " +
+                    "%s TEXT NOT NULL, " +
+                    "%s INTEGER NOT NULL"+
+                    ")",
+            TableDefinitions.TASK_TABLE_NAME,
+            TableDefinitions.ID,
+            TableDefinitions.LIST_FK,
+            TableDefinitions.TASK_NAME,
+            TableDefinitions.TASK_COMPLETED
+    );
 
     public static final String[] SQL_SEED_LIST_TABLE = {
             "insert into " +

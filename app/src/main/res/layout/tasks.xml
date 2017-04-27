@@ -20,16 +20,27 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
-    <EditText
-        android:id="@+id/new_task"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter new item" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/add_task"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Task" />
+        <EditText
+            android:id="@+id/new_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter new item"
+            android:imeOptions="actionSend"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@+id/add_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="{fa-plus}" />
+    </LinearLayout>
 
 </LinearLayout>

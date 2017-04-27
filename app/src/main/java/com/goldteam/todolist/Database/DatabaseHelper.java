@@ -45,22 +45,50 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public void writeLists(String list) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(DataDefinitions.TableDefinitions.LIST_NAME, list);
         db.insert(DataDefinitions.TableDefinitions.LIST_TABLE_NAME, null, values);
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void writeTask(String task, int listID) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(DataDefinitions.TableDefinitions.TASK_NAME, task);
+        values.put(DataDefinitions.TableDefinitions.TASK_COMPLETED, 0);
         values.put(DataDefinitions.TableDefinitions.LIST_FK, listID);
+
         db.insert(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, null, values);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    public void updateTask(String currentTaskName, Task task) {
+        final String taskName = task.getName();
+        final boolean completed = task.isCompleted();
+        final int listId = task.getListId();
+        final SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        final ContentValues values = new ContentValues();
+        values.put(DataDefinitions.TableDefinitions.TASK_NAME, taskName);
+        values.put(DataDefinitions.TableDefinitions.TASK_COMPLETED, /*if*/ completed ? 1 : 0);
+        values.put(DataDefinitions.TableDefinitions.LIST_FK, listId);
+        final int rows = db.update(
+                DataDefinitions.TableDefinitions.TASK_TABLE_NAME,
+                values,
+                DataDefinitions.TableDefinitions.TASK_NAME + " = ? ",
+                new String[]{currentTaskName}
+        );
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public List<String> readLists() {
         SQLiteDatabase db = this.getReadableDatabase();
-        List lists = new ArrayList<>();
+        List<String> lists = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " + DataDefinitions.TableDefinitions.LIST_TABLE_NAME, null);
         while(cursor.moveToNext()) {
@@ -93,9 +121,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return list;
     }
 
-    public List<String> readTasks(int listID) {
+    public List<Task> readTasks(int listID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        List tasks = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " +
                 DataDefinitions.TableDefinitions.TASK_TABLE_NAME +
@@ -104,12 +132,30 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 " = " +
                 listID, null);
         while(cursor.moveToNext()) {
-            String list = cursor.getString(
-                    cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.TASK_NAME));
-            tasks.add(list);
+            String taskName = cursor.getString(
+                    cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.TASK_NAME)
+            );
+            final boolean completed = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(DataDefinitions.TableDefinitions.TASK_COMPLETED)
+            ) == 1;
+            final Task task = new Task();
+            task.setName(taskName);
+            task.setCompleted(completed);
+            task.setListId(listID);
+            tasks.add(task);
         }
         cursor.close();
         return tasks;
+    }
+
+    public Task readTask(String name, int listId) {
+        final List<Task> tasks = readTasks(listId);
+        for (Task task : tasks) {
+            if (task.getName().equals(name)) {
+                return task;
+            }
+        }
+        return null;
     }
 
     public void deleteLists(int id) {
@@ -125,11 +171,15 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public void deleteTask(String task) {
+
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
 
         String selection = DataDefinitions.TableDefinitions.TASK_NAME + " LIKE ?";
         String[] selectionArgs = { task };
         db.delete(DataDefinitions.TableDefinitions.TASK_TABLE_NAME, selection, selectionArgs);
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
 }
